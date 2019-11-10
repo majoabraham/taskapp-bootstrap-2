@@ -19,13 +19,14 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package sk.fourq.mario.taskappbootstrap;
+package sk.fourq.mario.taskappbootstrap.dao;
 
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ejb.Stateless;
 import sk.fourq.bootstrap.dao.jpa.AbstractDaoJpa;
+import sk.fourq.mario.taskappbootstrap.domain.Task;
 
 @Stateless
 public class TaskDaoJpa extends AbstractDaoJpa<Task, Integer> implements TaskDao {

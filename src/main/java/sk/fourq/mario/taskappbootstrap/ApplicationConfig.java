@@ -45,6 +45,7 @@ import sk.fourq.bootstrap.rest.resource.defaults.DefaultEventResource;
 import sk.fourq.bootstrap.rest.resource.defaults.DefaultGroupResource;
 import sk.fourq.bootstrap.rest.resource.defaults.DefaultMaintenanceResource;
 import sk.fourq.bootstrap.rest.resource.defaults.DefaultUserResource;
+import sk.fourq.mario.taskappbootstrap.rest.TaskResource;
 
 @ApplicationPath("rest")
 public class ApplicationConfig extends Application {
@@ -77,7 +78,6 @@ public class ApplicationConfig extends Application {
         this.resources.add(DefaultMaintenanceResource.class);
         //CUSTOM RESOURCES
         this.resources.add(TaskResource.class);
-        this.resources.add(UserResource.class);
     }
 
     @Override

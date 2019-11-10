@@ -19,32 +19,12 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package sk.fourq.mario.taskappbootstrap;
+package sk.fourq.mario.taskappbootstrap.dao;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-import sk.fourq.bootstrap.domain.AclPermission;
-import sk.fourq.bootstrap.service.AbstractService;
+import javax.ejb.Local;
+import sk.fourq.bootstrap.dao.Dao;
+import sk.fourq.mario.taskappbootstrap.domain.Task;
 
-@Stateless
-@LocalBean
-public class TaskService extends AbstractService<Task, Integer> {
-
-    public TaskService() {
-        super(Task.class);
-    }
-
-    @Inject
-    private TaskDao taskDao;
-
-    @Override
-    protected TaskDao getDao() {
-        return this.taskDao;
-    }
-
-    @Override
-    protected void authorize(final Task entity, final AclPermission permission) {
-
-    }
+@Local
+public interface TaskDao extends Dao<Task, Integer> {
 }

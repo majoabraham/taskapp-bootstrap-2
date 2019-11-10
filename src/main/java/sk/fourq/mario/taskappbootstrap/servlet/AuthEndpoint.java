@@ -19,7 +19,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package sk.fourq.mario.taskappbootstrap;
+package sk.fourq.mario.taskappbootstrap.servlet;
 
 import java.time.OffsetDateTime;
 import javax.inject.Inject;

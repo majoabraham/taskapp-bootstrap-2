@@ -19,7 +19,7 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package sk.fourq.mario.taskappbootstrap;
+package sk.fourq.mario.taskappbootstrap.rest;
 
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
@@ -35,6 +35,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import sk.fourq.bootstrap.search.FindParams;
+import sk.fourq.mario.taskappbootstrap.domain.Task;
+import sk.fourq.mario.taskappbootstrap.service.TaskService;
 
 @Path("task")
 @Produces(MediaType.APPLICATION_JSON)
