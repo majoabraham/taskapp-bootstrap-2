@@ -21,7 +21,9 @@
  */
 package sk.fourq.mario.taskappbootstrap.rest;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -34,7 +36,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import sk.fourq.bootstrap.l10n.LocalizationKeys;
+import sk.fourq.bootstrap.l10n.Localizer;
+import sk.fourq.bootstrap.messaging.DefaultMessage;
+import sk.fourq.bootstrap.messaging.MailService;
+import sk.fourq.bootstrap.messaging.Message;
+import sk.fourq.bootstrap.messaging.MessageParticipant;
+import sk.fourq.bootstrap.messaging.NotificationException;
 import sk.fourq.bootstrap.search.FindParams;
+import sk.fourq.bootstrap.security.Configs;
+import sk.fourq.bootstrap.security.RequestContext;
+import sk.fourq.bootstrap.service.UserService;
 import sk.fourq.mario.taskappbootstrap.domain.Task;
 import sk.fourq.mario.taskappbootstrap.service.TaskService;
 
@@ -44,12 +56,22 @@ import sk.fourq.mario.taskappbootstrap.service.TaskService;
 @ApplicationScoped
 public class TaskResource {
 
+    @Inject
+    private TaskService taskService;
+    @Inject
+    private MailService mailService;
+    @Inject
+    private Configs configs;
+    @Inject
+    private Localizer localizer;
+    @Inject
+    private RequestContext context;
+    @Inject
+    private UserService userService;
+
     public TaskResource() {
 
     }
-
-    @Inject
-    private TaskService taskService;
 
     @GET
     public Response getTasks() {
@@ -83,15 +105,32 @@ public class TaskResource {
 
     @Path("/{id}")
     @DELETE
-    public Response deleteTask(@PathParam("id") Integer id) {
+    public Response deleteTask(@PathParam("id") Integer id) throws NotificationException {
 
         Task task = taskService.delete(id);
 
         if (task != null) {
+            Message<Long> message = createMessage(task, id);
+            mailService.send(message);
             return Response.ok().status(Response.Status.NO_CONTENT).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+    private Message<Long> createMessage(Task task, Integer id) {
+        DefaultMessage message = new DefaultMessage();
+        message.setBody(localizer.get(
+            LocalizationKeys.BOOTSTRAP_ENTITY_DELETED,
+            configs.getLogLocale(),
+            task.getClass().getSimpleName(), task.getId()
+        ));
+        message.setSubject("deleted task");
+        Set<MessageParticipant> recipients = new HashSet<>();
+        recipients.add(userService.findByName("mario.abraham"));
+        message.setRecipients(recipients);
+
+        return message;
     }
 
     @PUT
