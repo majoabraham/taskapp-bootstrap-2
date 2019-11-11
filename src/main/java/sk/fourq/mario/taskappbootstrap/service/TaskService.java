@@ -24,29 +24,65 @@ package sk.fourq.mario.taskappbootstrap.service;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import sk.fourq.bootstrap.domain.Acl;
 import sk.fourq.bootstrap.domain.AclPermission;
-import sk.fourq.bootstrap.service.AbstractService;
+import sk.fourq.bootstrap.domain.Domain;
+import sk.fourq.bootstrap.domain.User;
+import sk.fourq.bootstrap.security.RequestContext;
+import sk.fourq.bootstrap.service.AbstractAclAwareService;
+import sk.fourq.mario.taskappbootstrap.dao.AclDao;
 import sk.fourq.mario.taskappbootstrap.dao.TaskDao;
 import sk.fourq.mario.taskappbootstrap.domain.Task;
 
 @Stateless
 @LocalBean
-public class TaskService extends AbstractService<Task, Integer> {
+public class TaskService extends AbstractAclAwareService<Task, Integer> {
 
     public TaskService() {
         super(Task.class);
     }
 
     @Inject
+    private RequestContext context;
+
+    @Inject
     private TaskDao taskDao;
+
+    @Inject
+    private AclDao aclDao;
 
     @Override
     protected TaskDao getDao() {
         return this.taskDao;
     }
 
-    @Override
-    protected void authorize(final Task entity, final AclPermission permission) {
+//    @Override
+//    protected void authorize(final Task entity, final AclPermission permission) {
+//
+//    }
 
+    @Override
+    protected void createAcls(Task entity, Task persistedEntity) {
+
+        final User activeUser = context.getUser();
+        final Domain domain = activeUser.getDomain();
+
+        Acl aclUserRead = new Acl();
+        aclUserRead.setAclPermission(AclPermission.READ);
+        aclUserRead.setAclPrincipal(activeUser);
+        entity.getAcl().add(aclUserRead);
+        aclDao.create(aclUserRead);
+
+        Acl aclUserWrite = new Acl();
+        aclUserWrite.setAclPermission(AclPermission.WRITE);
+        aclUserWrite.setAclPrincipal(activeUser);
+        entity.getAcl().add(aclUserWrite);
+        aclDao.create(aclUserWrite);
+
+        Acl aclDomainRead = new Acl();
+        aclDomainRead.setAclPermission(AclPermission.READ);
+        aclDomainRead.setAclPrincipal(domain);
+        entity.getAcl().add(aclDomainRead);
+        aclDao.create(aclDomainRead);
     }
 }

@@ -42,6 +42,7 @@
         <class>sk.fourq.bootstrap.l10n.LocalizableText</class>
         <class>sk.fourq.bootstrap.domain.EntityDiff</class>
         <class>sk.fourq.bootstrap.domain.EntityDiffItem</class>
+        <class>sk.fourq.bootstrap.domain.Acl</class>
         <class>sk.fourq.mario.taskappbootstrap.domain.Task</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>

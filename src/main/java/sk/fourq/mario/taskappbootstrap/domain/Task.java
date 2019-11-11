@@ -22,18 +22,22 @@
 package sk.fourq.mario.taskappbootstrap.domain;
 
 import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import sk.fourq.bootstrap.domain.Acl;
+import sk.fourq.bootstrap.domain.interfaces.AclAware;
 import sk.fourq.bootstrap.domain.interfaces.IdAware;
 
 @Entity
 @Table(name = "TASK")
-public class Task implements IdAware<Integer> {
+public class Task implements IdAware<Integer>, AclAware {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -58,6 +62,9 @@ public class Task implements IdAware<Integer> {
         this.id = id;
     }
 
+    @OneToMany
+    private Set<Acl> acl;
+
     public String getDescription() {
         return description;
     }
@@ -75,18 +82,29 @@ public class Task implements IdAware<Integer> {
     }
 
     @Override
+    public void setAcl(Set<Acl> acl) {
+        this.acl = acl;
+    }
+
+    @Override
+    public Set<Acl> getAcl() {
+        return this.acl;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return done == task.done &&
             id.equals(task.id) &&
-            description.equals(task.description);
+            description.equals(task.description) &&
+            Objects.equals(acl, task.acl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, done);
+        return Objects.hash(id, description, done, acl);
     }
 
     @Override
@@ -95,6 +113,7 @@ public class Task implements IdAware<Integer> {
         sb.append("id=").append(id);
         sb.append(", description='").append(description).append('\'');
         sb.append(", done=").append(done);
+        sb.append(", acl=").append(acl);
         sb.append('}');
         return sb.toString();
     }
