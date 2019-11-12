@@ -21,8 +21,6 @@ public class TaskUtils {
     @Inject
     private Localizer localizer;
 
-    private DefaultMessageParticipant messageParticipant;
-
     public Message<Long> createMessage(Task task, Integer id) {
         DefaultMessage message = new DefaultMessage();
         message.setBody(localizer.get(
@@ -32,7 +30,7 @@ public class TaskUtils {
         ));
         message.setSubject("deleted task");
         Set<MessageParticipant> recipients = new HashSet<>();
-        messageParticipant = new DefaultMessageParticipant();
+        DefaultMessageParticipant messageParticipant = new DefaultMessageParticipant();
         messageParticipant.setEmail("mario.abraham@outlook.com");
         messageParticipant.setTel("+421944264747");
         recipients.add(messageParticipant);

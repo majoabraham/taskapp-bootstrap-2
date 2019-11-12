@@ -34,6 +34,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import sk.fourq.bootstrap.messaging.EuroSmsService;
 import sk.fourq.bootstrap.messaging.MailService;
 import sk.fourq.bootstrap.messaging.Message;
 import sk.fourq.bootstrap.messaging.NotificationException;
@@ -52,6 +53,8 @@ public class TaskResource {
     private TaskService taskService;
     @Inject
     private MailService mailService;
+    @Inject
+    private EuroSmsService euroSmsService;
     @Inject
     private TaskUtils taskUtils;
 
@@ -98,6 +101,7 @@ public class TaskResource {
         if (task != null) {
             Message<Long> message = taskUtils.createMessage(task, id);
             mailService.send(message);
+//            euroSmsService.send(message);
             return Response.ok().status(Response.Status.NO_CONTENT).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
