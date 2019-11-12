@@ -20,12 +20,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package sk.fourq.mario.taskappbootstrap.dao;
+package sk.fourq.mario.taskappbootstrap.dto;
 
-import javax.ejb.Local;
-import sk.fourq.bootstrap.dao.Dao;
-import sk.fourq.bootstrap.domain.Acl;
+import sk.fourq.bootstrap.rest.dto.EventDto;
 
-@Local
-public interface AclDao extends Dao<Acl, Integer> {
+public class TaskEventDto extends EventDto {
 }
