@@ -23,6 +23,7 @@ package sk.fourq.mario.taskappbootstrap.domain;
 
 import java.util.Objects;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -62,7 +63,7 @@ public class Task implements IdAware<Integer>, AclAware {
         this.id = id;
     }
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Acl> acl;
 
     public String getDescription() {
