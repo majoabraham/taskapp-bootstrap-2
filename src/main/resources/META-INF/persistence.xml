@@ -44,6 +44,7 @@
         <class>sk.fourq.bootstrap.domain.EntityDiffItem</class>
         <class>sk.fourq.bootstrap.domain.Acl</class>
         <class>sk.fourq.mario.taskappbootstrap.domain.Task</class>
+        <class>sk.fourq.mario.taskappbootstrap.domain.TaskEvent</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <shared-cache-mode>NONE</shared-cache-mode>

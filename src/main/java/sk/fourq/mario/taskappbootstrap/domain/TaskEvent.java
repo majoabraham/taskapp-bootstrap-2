@@ -20,32 +20,46 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-package sk.fourq.mario.taskappbootstrap.dto;
+package sk.fourq.mario.taskappbootstrap.domain;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import sk.fourq.bootstrap.domain.Event;
-import sk.fourq.bootstrap.l10n.Localizer;
-import sk.fourq.bootstrap.rest.dto.EventDto;
-import sk.fourq.mario.taskappbootstrap.domain.Task;
-import sk.fourq.mario.taskappbootstrap.domain.TaskEvent;
+import sk.fourq.bootstrap.domain.enums.EventSeverity;
+import sk.fourq.bootstrap.l10n.LocalizableText;
+import sk.fourq.bootstrap.rest.jackson.ExcludeFieldsPropertyFilter;
 
-public class TaskEventDto extends EventDto {
+@Entity
+@DiscriminatorValue("T")
+@JsonFilter(ExcludeFieldsPropertyFilter.NAME)
+public class TaskEvent extends Event {
 
+    private static final long serialVersionUID = 1L;
+
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "TASK_ID")
     private Task task;
 
-    public TaskEventDto() {
+    public TaskEvent() {
         //FOR SERIALIZATION PURPOSES
     }
 
-    public TaskEventDto(TaskEvent e, Localizer localizer) {
-        super(e, localizer);
-        this.task = e.getTask();
+    public TaskEvent(final Boolean system, final EventSeverity severity, final Task task, final LocalizableText title,
+                     final LocalizableText message) {
+        super(system, severity, title, message);
+        this.task = task;
     }
 
     public Task getTask() {
         return task;
     }
 
-    public void setTask(Task task) {
+    public void setTask(final Task task) {
         this.task = task;
     }
 }

@@ -31,6 +31,10 @@ import sk.fourq.bootstrap.domain.User_;
 import sk.fourq.bootstrap.rest.dto.UserEventDto;
 import sk.fourq.bootstrap.util.EventDescriptor;
 import sk.fourq.bootstrap.util.EventDescriptors;
+import sk.fourq.mario.taskappbootstrap.domain.Task;
+import sk.fourq.mario.taskappbootstrap.domain.TaskEvent;
+import sk.fourq.mario.taskappbootstrap.domain.Task_;
+import sk.fourq.mario.taskappbootstrap.dto.TaskEventDto;
 
 /**
  * Startup task, ktorý registruje EventDescriptory
@@ -42,14 +46,22 @@ public class StartupTask {
     private EventDescriptors eventDescriptors;
 
     @PostConstruct
-    public void onStart(){
+    public void onStart() {
         eventDescriptors.add(UserEvent.class.getSimpleName(),
-                new EventDescriptor(
-                        UserEvent.class,
-                        User_.class,
-                        User.class,
-                        "user",
-                        UserEventDto.class
-                ));
+            new EventDescriptor(
+                UserEvent.class,
+                User_.class,
+                User.class,
+                "user",
+                UserEventDto.class
+            ));
+        eventDescriptors.add(TaskEvent.class.getSimpleName(),
+            new EventDescriptor(
+                TaskEvent.class,
+                Task_.class,
+                Task.class,
+                "task",
+                TaskEventDto.class
+            ));
     }
 }

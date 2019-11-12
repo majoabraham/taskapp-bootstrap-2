@@ -55,11 +55,11 @@ public class AuthEndpoint extends BootstrapAuthEndpoint {
     @Override
     protected void executeAfterLoginSucceeded(HttpServletRequest httpServletRequest, UserAware userAware) {
         UserEvent userEvent = new UserEvent(
-                true,
-                EventSeverity.INFO,
-                userAware.getUser(),
-                new LocalizableText("Prihlásenie", false),
-                new LocalizableText("Používateľ sa prihlásil", false)
+            true,
+            EventSeverity.INFO,
+            userAware.getUser(),
+            new LocalizableText("Prihlásenie", false),
+            new LocalizableText("Používateľ sa prihlásil", false)
         );
 
         //FIXME: Ešte raz sa zamyslieť, či chceme naozaj obchádzať servisu a používať na systémové eventy dao
