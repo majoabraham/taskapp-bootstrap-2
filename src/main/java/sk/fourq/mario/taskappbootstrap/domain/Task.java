@@ -48,7 +48,7 @@ import sk.fourq.mario.taskappbootstrap.domain.json.OwnerSerializer;
 
 @Entity
 @Table(name = "TASK")
-@JsonIgnoreProperties({"getAcl"})
+@JsonFilter(ExcludeFieldsPropertyFilter.NAME)
 public class Task implements IdAware<Integer>, AclAware {
 
     @Id
