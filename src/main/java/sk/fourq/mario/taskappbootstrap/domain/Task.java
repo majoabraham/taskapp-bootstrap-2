@@ -21,6 +21,11 @@
  */
 package sk.fourq.mario.taskappbootstrap.domain;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -29,15 +34,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import sk.fourq.bootstrap.domain.Acl;
+import sk.fourq.bootstrap.domain.User;
 import sk.fourq.bootstrap.domain.interfaces.AclAware;
 import sk.fourq.bootstrap.domain.interfaces.IdAware;
+import sk.fourq.bootstrap.rest.jackson.ExcludeFieldsPropertyFilter;
+import sk.fourq.mario.taskappbootstrap.domain.json.OwnerSerializer;
 
 @Entity
 @Table(name = "TASK")
+@JsonIgnoreProperties({"getAcl"})
 public class Task implements IdAware<Integer>, AclAware {
 
     @Id
@@ -53,6 +64,14 @@ public class Task implements IdAware<Integer>, AclAware {
     @NotNull
     private boolean done;
 
+    @ManyToOne
+    @JoinColumn(name = "OWNER_ID", nullable = false)
+    @JsonSerialize(using = OwnerSerializer.class)
+    private User owner;
+
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private Set<Acl> acl;
+
     @Override
     public Integer getId() {
         return this.id;
@@ -62,9 +81,6 @@ public class Task implements IdAware<Integer>, AclAware {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
-    private Set<Acl> acl;
 
     public String getDescription() {
         return description;
@@ -82,9 +98,12 @@ public class Task implements IdAware<Integer>, AclAware {
         this.done = done;
     }
 
-    @Override
-    public void setAcl(Set<Acl> acl) {
-        this.acl = acl;
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User user) {
+        this.owner = user;
     }
 
     @Override
@@ -93,19 +112,25 @@ public class Task implements IdAware<Integer>, AclAware {
     }
 
     @Override
+    public void setAcl(Set<Acl> acl) {
+        this.acl = acl;
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
         return done == task.done &&
-            id.equals(task.id) &&
-            description.equals(task.description) &&
+            Objects.equals(id, task.id) &&
+            Objects.equals(description, task.description) &&
+            Objects.equals(owner, task.owner) &&
             Objects.equals(acl, task.acl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, done, acl);
+        return Objects.hash(id, description, done, owner, acl);
     }
 
     @Override
@@ -114,6 +139,7 @@ public class Task implements IdAware<Integer>, AclAware {
         sb.append("id=").append(id);
         sb.append(", description='").append(description).append('\'');
         sb.append(", done=").append(done);
+        sb.append(", user=").append(owner);
         sb.append(", acl=").append(acl);
         sb.append('}');
         return sb.toString();

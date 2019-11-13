@@ -39,6 +39,7 @@ import sk.fourq.bootstrap.messaging.MailService;
 import sk.fourq.bootstrap.messaging.Message;
 import sk.fourq.bootstrap.messaging.NotificationException;
 import sk.fourq.bootstrap.search.FindParams;
+import sk.fourq.bootstrap.security.RequestContext;
 import sk.fourq.mario.taskappbootstrap.domain.Task;
 import sk.fourq.mario.taskappbootstrap.service.TaskService;
 import sk.fourq.mario.taskappbootstrap.util.TaskUtils;
@@ -57,6 +58,8 @@ public class TaskResource {
     private EuroSmsService euroSmsService;
     @Inject
     private TaskUtils taskUtils;
+    @Inject
+    private RequestContext context;
 
     public TaskResource() {
 
@@ -87,6 +90,8 @@ public class TaskResource {
     @POST
     public Response createTask(Task task) {
 
+        task.setOwner(context.getUser());
+
         taskService.create(task);
 
         return Response.ok().status(Response.Status.CREATED).build();
@@ -100,7 +105,7 @@ public class TaskResource {
 
         if (task != null) {
             Message<Long> message = taskUtils.createMessage(task, id);
-            mailService.send(message);
+//            mailService.send(message);
 //            euroSmsService.send(message);
             return Response.ok().status(Response.Status.NO_CONTENT).build();
         } else {
