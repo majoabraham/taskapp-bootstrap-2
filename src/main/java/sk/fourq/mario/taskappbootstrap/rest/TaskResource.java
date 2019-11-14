@@ -105,7 +105,7 @@ public class TaskResource {
 
         if (task != null) {
             Message<Long> message = taskUtils.createMessage(task, id);
-//            mailService.send(message);
+            mailService.send(message);
 //            euroSmsService.send(message);
             return Response.ok().status(Response.Status.NO_CONTENT).build();
         } else {

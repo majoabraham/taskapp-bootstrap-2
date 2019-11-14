@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import sk.fourq.bootstrap.domain.User;
 import sk.fourq.bootstrap.domain.UserEvent;
 import sk.fourq.bootstrap.domain.User_;
+import sk.fourq.bootstrap.l10n.Localizer;
 import sk.fourq.bootstrap.rest.dto.UserEventDto;
 import sk.fourq.bootstrap.util.EventDescriptor;
 import sk.fourq.bootstrap.util.EventDescriptors;
@@ -37,13 +38,15 @@ import sk.fourq.mario.taskappbootstrap.domain.Task_;
 import sk.fourq.mario.taskappbootstrap.dto.TaskEventDto;
 
 /**
- * Startup task, ktorý registruje EventDescriptory
+ * Startup task, ktorý registruje EventDescriptory a resource Bundle
  */
 @Singleton
 @Startup
 public class StartupTask {
     @Inject
     private EventDescriptors eventDescriptors;
+    @Inject
+    private Localizer localizer;
 
     @PostConstruct
     public void onStart() {
@@ -63,5 +66,7 @@ public class StartupTask {
                 "task",
                 TaskEventDto.class
             ));
+
+        localizer.addBundle("taskBundle", "sk/fourq/mario/taskappbootstrap/l10n/TaskBundle");
     }
 }

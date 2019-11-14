@@ -33,6 +33,7 @@ import sk.fourq.bootstrap.domain.interfaces.UserAware;
 import sk.fourq.bootstrap.l10n.LocalizableText;
 import sk.fourq.bootstrap.security.RequestContext;
 import sk.fourq.bootstrap.servlet.BootstrapAuthEndpoint;
+import sk.fourq.mario.taskappbootstrap.l10n.TaskLocalizationKeys;
 
 @WebServlet(urlPatterns = "/auth/*")
 public class AuthEndpoint extends BootstrapAuthEndpoint {
@@ -58,8 +59,8 @@ public class AuthEndpoint extends BootstrapAuthEndpoint {
             true,
             EventSeverity.INFO,
             userAware.getUser(),
-            new LocalizableText("Prihlásenie", false),
-            new LocalizableText("Používateľ sa prihlásil", false)
+            new LocalizableText(TaskLocalizationKeys.TASK_LOGIN, true),
+            new LocalizableText(TaskLocalizationKeys.TASK_SIGN_IN, userAware.getUser().getName())
         );
 
         //FIXME: Ešte raz sa zamyslieť, či chceme naozaj obchádzať servisu a používať na systémové eventy dao

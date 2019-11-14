@@ -22,9 +22,6 @@
 package sk.fourq.mario.taskappbootstrap.domain;
 
 import com.fasterxml.jackson.annotation.JsonFilter;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import java.util.Objects;
 import java.util.Set;
@@ -40,16 +37,18 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import sk.fourq.bootstrap.domain.Acl;
+import sk.fourq.bootstrap.domain.AclPrincipal;
 import sk.fourq.bootstrap.domain.User;
 import sk.fourq.bootstrap.domain.interfaces.AclAware;
 import sk.fourq.bootstrap.domain.interfaces.IdAware;
+import sk.fourq.bootstrap.domain.interfaces.OwnerAware;
 import sk.fourq.bootstrap.rest.jackson.ExcludeFieldsPropertyFilter;
 import sk.fourq.mario.taskappbootstrap.domain.json.OwnerSerializer;
 
 @Entity
 @Table(name = "TASK")
 @JsonFilter(ExcludeFieldsPropertyFilter.NAME)
-public class Task implements IdAware<Integer>, AclAware {
+public class Task implements IdAware<Integer>, AclAware, OwnerAware {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -98,14 +97,6 @@ public class Task implements IdAware<Integer>, AclAware {
         this.done = done;
     }
 
-    public User getOwner() {
-        return owner;
-    }
-
-    public void setOwner(User user) {
-        this.owner = user;
-    }
-
     @Override
     public Set<Acl> getAcl() {
         return this.acl;
@@ -114,6 +105,16 @@ public class Task implements IdAware<Integer>, AclAware {
     @Override
     public void setAcl(Set<Acl> acl) {
         this.acl = acl;
+    }
+
+    @Override
+    public AclPrincipal getOwner() {
+        return this.owner;
+    }
+
+    @Override
+    public void setOwner(AclPrincipal owner) {
+        this.owner = (User) owner;
     }
 
     @Override
@@ -139,7 +140,7 @@ public class Task implements IdAware<Integer>, AclAware {
         sb.append("id=").append(id);
         sb.append(", description='").append(description).append('\'');
         sb.append(", done=").append(done);
-        sb.append(", user=").append(owner);
+        sb.append(", owner=").append(owner);
         sb.append(", acl=").append(acl);
         sb.append('}');
         return sb.toString();
