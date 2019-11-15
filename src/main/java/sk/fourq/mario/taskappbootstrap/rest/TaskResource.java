@@ -22,6 +22,7 @@
 package sk.fourq.mario.taskappbootstrap.rest;
 
 import java.util.List;
+import java.util.Set;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
@@ -32,6 +33,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import sk.fourq.bootstrap.messaging.EuroSmsService;
@@ -44,6 +46,7 @@ import sk.fourq.bootstrap.security.exception.ClientException;
 import sk.fourq.bootstrap.util.ErrorCode;
 import sk.fourq.mario.taskappbootstrap.domain.Task;
 import sk.fourq.mario.taskappbootstrap.l10n.TaskLocalizationKeys;
+import sk.fourq.mario.taskappbootstrap.search.TaskFindParams;
 import sk.fourq.mario.taskappbootstrap.service.TaskService;
 import sk.fourq.mario.taskappbootstrap.util.TaskUtils;
 
@@ -171,6 +174,18 @@ public class TaskResource {
         findParams.addFilter("description", text);
 
         List<Task> tasks = taskService.findAll(findParams).getItems();
+
+        return Response.ok(tasks).build();
+    }
+
+    @Path("/filter-color/")
+    @GET
+    public Response filterTasks(@QueryParam("color") final Set<String> colors) {
+
+        TaskFindParams taskFindParams = TaskFindParams.create();
+        taskFindParams.setColors(colors);
+
+        List<Task> tasks = taskService.findAll(taskFindParams).getItems();
 
         return Response.ok(tasks).build();
     }

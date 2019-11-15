@@ -27,4 +27,8 @@ import sk.fourq.mario.taskappbootstrap.domain.Task;
 
 @Local
 public interface TaskDao extends Dao<Task, Integer> {
+
+    //IDENTIFIKATORY PREDIKATOV VO WHERE PODMIENKE
+    String TFP_COLORS_PREDICATE = "TFP_COLORS_PREDICATE";
+    String TFP_EXCLUDE_COLORS_PREDICATE = "TFP_EXCLUDE_COLORS_PREDICATE";
 }

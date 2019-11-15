@@ -61,15 +61,15 @@ public class Task implements IdAware<Integer>, AclAware, OwnerAware {
 
     @Column(name = "DONE")
     @NotNull
-    private boolean done;
+    private Boolean done;
+
+    @Column(name = "COLOR")
+    private String color;
 
     @ManyToOne
     @JoinColumn(name = "OWNER_ID", nullable = false)
     @JsonSerialize(using = OwnerSerializer.class)
     private User owner;
-
-    @Column(name = "COLOR")
-    private String color;
 
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Acl> acl;
@@ -92,11 +92,11 @@ public class Task implements IdAware<Integer>, AclAware, OwnerAware {
         this.description = description;
     }
 
-    public boolean isDone() {
+    public Boolean isDone() {
         return done;
     }
 
-    public void setDone(boolean done) {
+    public void setDone(Boolean done) {
         this.done = done;
     }
 
