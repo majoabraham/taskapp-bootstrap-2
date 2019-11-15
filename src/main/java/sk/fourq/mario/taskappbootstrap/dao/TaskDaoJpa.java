@@ -39,22 +39,8 @@ import sk.fourq.mario.taskappbootstrap.search.TaskFindParams;
 @Stateless
 public class TaskDaoJpa extends AbstractDaoJpa<Task, Integer> implements TaskDao {
 
-    private static Set<String> filterableFields;
-
-    static {
-        filterableFields = new HashSet<>();
-        filterableFields.add("description");
-        filterableFields.add("color");
-    }
-
     public TaskDaoJpa() {
         super(Task.class);
-    }
-
-    @Override
-    public Set<String> getFilterableFields() {
-
-        return Collections.unmodifiableSet(filterableFields);
     }
 
     @Override
@@ -64,17 +50,17 @@ public class TaskDaoJpa extends AbstractDaoJpa<Task, Integer> implements TaskDao
                                   final CriteriaQuery<?> cq,
                                   final Root<Task> root) {
 
-//        final String pattern = fp.getFulltextFilterPattern();
-//
-//        if (pattern != null) {
-//
-//            Predicate predicate = cb.or(cb.like(cb.lower(root.get(Task_.description)), pattern.toLowerCase(),
-//                FindParams.PATTERN_SPEC_CHAR),
-//                cb.like(cb.lower(root.get(Task_.color)), pattern.toLowerCase(),
-//                    FindParams.PATTERN_SPEC_CHAR));
-//
-//            predicateMap.put(FP_SIMPLE_FULLTEXT_PREDICATE, predicate);
-//        }
+        final String pattern = fp.getFulltextFilterPattern();
+
+        if (pattern != null) {
+
+            Predicate predicate = cb.or(cb.like(cb.lower(root.get(Task_.description)), pattern.toLowerCase(),
+                FindParams.PATTERN_SPEC_CHAR),
+                cb.like(cb.lower(root.get(Task_.color)), pattern.toLowerCase(),
+                    FindParams.PATTERN_SPEC_CHAR));
+
+            predicateMap.put(FP_SIMPLE_FULLTEXT_PREDICATE, predicate);
+        }
 
         if (fp instanceof TaskFindParams) {
             TaskFindParams taskFindParams = (TaskFindParams) fp;

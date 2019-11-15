@@ -102,7 +102,7 @@ public class TaskResource {
 
         if (task == null) {
             throw new ClientException(
-                ErrorCode.MISSING_TYPE_AND_ENTITY_ID,
+                ErrorCode.BAD_REQUEST,
                 TaskLocalizationKeys.TASK_NO_TASK_INCLUDED
             );
         }
@@ -139,7 +139,7 @@ public class TaskResource {
 
         if (task == null) {
             throw new ClientException(
-                ErrorCode.MISSING_TYPE_AND_ENTITY_ID,
+                ErrorCode.BAD_REQUEST,
                 TaskLocalizationKeys.TASK_NO_TASK_INCLUDED
             );
         }
@@ -170,10 +170,17 @@ public class TaskResource {
     @GET
     public Response filterTasks(@PathParam("text") String text) {
 
-        FindParams findParams = FindParams.create();
-        findParams.addFilter("description", text);
+        if (text == null) {
+            throw new ClientException(
+                ErrorCode.BAD_REQUEST,
+                TaskLocalizationKeys.TASK_NO_TEXT_ENTERED
+            );
+        }
 
-        List<Task> tasks = taskService.findAll(findParams).getItems();
+        TaskFindParams taskFindParams = TaskFindParams.create();
+        taskFindParams.fulltextFilter(text);
+
+        List<Task> tasks = taskService.findAll(taskFindParams).getItems();
 
         return Response.ok(tasks).build();
     }
@@ -181,6 +188,13 @@ public class TaskResource {
     @Path("/filter-color/")
     @GET
     public Response filterTasks(@QueryParam("color") final Set<String> colors) {
+
+        if (colors.isEmpty()) {
+            throw new ClientException(
+                ErrorCode.BAD_REQUEST,
+                TaskLocalizationKeys.TASK_NO_COLOR_CHOSEN
+            );
+        }
 
         TaskFindParams taskFindParams = TaskFindParams.create();
         taskFindParams.setColors(colors);

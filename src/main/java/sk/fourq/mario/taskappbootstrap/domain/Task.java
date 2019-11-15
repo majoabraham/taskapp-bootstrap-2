@@ -64,6 +64,7 @@ public class Task implements IdAware<Integer>, AclAware, OwnerAware {
     private Boolean done;
 
     @Column(name = "COLOR")
+    @NotNull
     private String color;
 
     @ManyToOne
