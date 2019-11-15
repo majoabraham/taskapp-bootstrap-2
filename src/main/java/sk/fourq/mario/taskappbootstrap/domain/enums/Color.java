@@ -19,18 +19,25 @@
  * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package sk.fourq.mario.taskappbootstrap.l10n;
+package sk.fourq.mario.taskappbootstrap.domain.enums;
 
-public interface TaskLocalizationKeys {
-    String TASK_LOGIN = "TASK_LOGIN";
-    String TASK_SIGN_IN = "TASK_SIGN_IN";
-    String TASK_ID_DOESNT_EXIST = "TASK_ID_DOESNT_EXIST";
-    String TASK_ID_MISSING="TASK_ID_MISSING";
-    String TASK_NO_TASK_INCLUDED="TASK_NO_TASK_INCLUDED";
-    String TASK_COLOR_BLACK="TASK_COLOR_BLACK";
-    String TASK_COLOR_BLUE="TASK_COLOR_BLUE";
-    String TASK_COLOR_GREEN="TASK_COLOR_GREEN";
-    String TASK_COLOR_YELLOW="TASK_COLOR_YELLOW";
-    String TASK_COLOR_RED="TASK_COLOR_RED";
-    String TASK_COLOR_WHITE="TASK_COLOR_WHITE";
+import sk.fourq.mario.taskappbootstrap.l10n.TaskLocalizationKeys;
+
+public enum Color {
+    BLACK(TaskLocalizationKeys.TASK_COLOR_BLACK),
+    BLUE(TaskLocalizationKeys.TASK_COLOR_BLUE),
+    GREEN(TaskLocalizationKeys.TASK_COLOR_GREEN),
+    YELLOW(TaskLocalizationKeys.TASK_COLOR_YELLOW),
+    RED(TaskLocalizationKeys.TASK_COLOR_RED),
+    WHITE(TaskLocalizationKeys.TASK_COLOR_WHITE);
+
+    private final String lokalizationKey;
+
+    private Color(String lokalizationKey) {
+        this.lokalizationKey = lokalizationKey;
+    }
+
+    public String getLokalizationKey() {
+        return lokalizationKey;
+    }
 }

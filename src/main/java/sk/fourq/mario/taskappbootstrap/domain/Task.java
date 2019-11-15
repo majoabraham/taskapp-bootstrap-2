@@ -68,6 +68,9 @@ public class Task implements IdAware<Integer>, AclAware, OwnerAware {
     @JsonSerialize(using = OwnerSerializer.class)
     private User owner;
 
+    @Column(name = "COLOR")
+    private String color;
+
     @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private Set<Acl> acl;
 
@@ -117,6 +120,14 @@ public class Task implements IdAware<Integer>, AclAware, OwnerAware {
         this.owner = (User) owner;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -126,12 +137,13 @@ public class Task implements IdAware<Integer>, AclAware, OwnerAware {
             Objects.equals(id, task.id) &&
             Objects.equals(description, task.description) &&
             Objects.equals(owner, task.owner) &&
+            Objects.equals(color, task.color) &&
             Objects.equals(acl, task.acl);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, done, owner, acl);
+        return Objects.hash(id, description, done, owner, color, acl);
     }
 
     @Override
@@ -141,6 +153,7 @@ public class Task implements IdAware<Integer>, AclAware, OwnerAware {
         sb.append(", description='").append(description).append('\'');
         sb.append(", done=").append(done);
         sb.append(", owner=").append(owner);
+        sb.append(", color='").append(color).append('\'');
         sb.append(", acl=").append(acl);
         sb.append('}');
         return sb.toString();

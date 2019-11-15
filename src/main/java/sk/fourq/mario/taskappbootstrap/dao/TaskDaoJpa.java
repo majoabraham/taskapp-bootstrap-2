@@ -36,6 +36,7 @@ public class TaskDaoJpa extends AbstractDaoJpa<Task, Integer> implements TaskDao
     static {
         filterableFields = new HashSet<>();
         filterableFields.add("description");
+        filterableFields.add("color");
     }
 
     public TaskDaoJpa() {
