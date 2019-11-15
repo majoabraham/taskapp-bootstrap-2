@@ -40,7 +40,10 @@ import sk.fourq.bootstrap.messaging.Message;
 import sk.fourq.bootstrap.messaging.NotificationException;
 import sk.fourq.bootstrap.search.FindParams;
 import sk.fourq.bootstrap.security.RequestContext;
+import sk.fourq.bootstrap.security.exception.ClientException;
+import sk.fourq.bootstrap.util.ErrorCode;
 import sk.fourq.mario.taskappbootstrap.domain.Task;
+import sk.fourq.mario.taskappbootstrap.l10n.TaskLocalizationKeys;
 import sk.fourq.mario.taskappbootstrap.service.TaskService;
 import sk.fourq.mario.taskappbootstrap.util.TaskUtils;
 
@@ -83,12 +86,23 @@ public class TaskResource {
         if (task != null) {
             return Response.ok(task).build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new ClientException(
+                ErrorCode.ENTITY_NOT_FOUND,
+                TaskLocalizationKeys.TASK_ID_DOESNT_EXIST,
+                id.toString()
+            );
         }
     }
 
     @POST
     public Response createTask(Task task) {
+
+        if (task == null) {
+            throw new ClientException(
+                ErrorCode.MISSING_TYPE_AND_ENTITY_ID,
+                TaskLocalizationKeys.TASK_NO_TASK_INCLUDED
+            );
+        }
 
         task.setOwner(context.getUser());
 
@@ -105,16 +119,44 @@ public class TaskResource {
 
         if (task != null) {
             Message<Long> message = taskUtils.createMessage(task, id);
-            mailService.send(message);
+//            mailService.send(message);
 //            euroSmsService.send(message);
             return Response.ok().status(Response.Status.NO_CONTENT).build();
         } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            throw new ClientException(
+                ErrorCode.ENTITY_NOT_FOUND,
+                TaskLocalizationKeys.TASK_ID_DOESNT_EXIST,
+                id.toString()
+            );
         }
     }
 
     @PUT
     public Response updateTask(Task task) {
+
+        if (task == null) {
+            throw new ClientException(
+                ErrorCode.MISSING_TYPE_AND_ENTITY_ID,
+                TaskLocalizationKeys.TASK_NO_TASK_INCLUDED
+            );
+        }
+
+        Integer taskID = task.getId();
+
+        if (taskID == null) {
+            throw new ClientException(
+                ErrorCode.MISSING_TYPE_AND_ENTITY_ID,
+                TaskLocalizationKeys.TASK_ID_MISSING
+            );
+        }
+
+        if (taskService.find(taskID) == null) {
+            throw new ClientException(
+                ErrorCode.ENTITY_NOT_FOUND,
+                TaskLocalizationKeys.TASK_ID_DOESNT_EXIST,
+                task.getId().toString()
+            );
+        }
 
         taskService.update(task);
 

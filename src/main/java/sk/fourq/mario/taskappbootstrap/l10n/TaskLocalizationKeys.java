@@ -24,4 +24,7 @@ package sk.fourq.mario.taskappbootstrap.l10n;
 public interface TaskLocalizationKeys {
     String TASK_LOGIN = "TASK_LOGIN";
     String TASK_SIGN_IN = "TASK_SIGN_IN";
+    String TASK_ID_DOESNT_EXIST = "TASK_ID_DOESNT_EXIST";
+    String TASK_ID_MISSING="TASK_ID_MISSING";
+    String TASK_NO_TASK_INCLUDED="TASK_NO_TASK_INCLUDED";
 }
